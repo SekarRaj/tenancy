@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
 @Repository
-public class PatientRepository {
+public class PatientService {
+
+//    private final DatabaseClient dbClient;
     public Mono<Patient> findById(String id) {
         return Mono.just(Patient.builder()
                 .firstName("John")

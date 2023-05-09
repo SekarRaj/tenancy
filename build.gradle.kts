@@ -23,8 +23,9 @@ repositories {
 
 dependencies {
 //    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
-//    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
