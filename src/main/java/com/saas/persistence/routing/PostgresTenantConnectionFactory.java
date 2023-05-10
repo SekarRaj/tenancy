@@ -4,6 +4,7 @@ import io.r2dbc.spi.ConnectionFactoryMetadata;
 import org.springframework.r2dbc.connection.lookup.AbstractRoutingConnectionFactory;
 import reactor.core.publisher.Mono;
 
+import static com.saas.entity.constant.TenantConstants.TENANT_KEY;
 import static com.saas.utils.ReactorUtils.errorIfEmpty;
 
 public class PostgresTenantConnectionFactory extends AbstractRoutingConnectionFactory {
@@ -19,8 +20,6 @@ public class PostgresTenantConnectionFactory extends AbstractRoutingConnectionFa
             return NAME;
         }
     }
-
-    private final String TENANT_KEY = "tenant";
 
     private final String TENANT_MISSING_ERROR = String.format("ContextView does not contain the Lookup Key '%s'", TENANT_KEY);
 

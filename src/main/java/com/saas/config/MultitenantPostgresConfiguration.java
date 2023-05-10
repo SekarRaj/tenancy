@@ -4,6 +4,7 @@ import com.saas.persistence.routing.PostgresTenantConnectionFactory;
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
@@ -18,21 +19,25 @@ import static java.util.Map.entry;
 @EnableR2dbcRepositories
 @EnableTransactionManagement
 public class MultitenantPostgresConfiguration extends AbstractR2dbcConfiguration {
+    @Bean
     public ConnectionFactory tenantOneConnectionFactory() {
         return new PostgresqlConnectionFactory(PostgresqlConnectionConfiguration.builder()
-                .host("host")
-                .database("tenantOne_database")
-                .username("username")
-                .password("password")
+                .host("localhost")
+                .port(5432)
+                .database("t1_db")
+                .username("postgres")
+                .password("password123")
                 .build());
     }
 
+    @Bean
     public ConnectionFactory tenantTwoConnectionFactory() {
         return new PostgresqlConnectionFactory(PostgresqlConnectionConfiguration.builder()
-                .host("host")
-                .database("tenantTwo_database")
-                .username("username")
-                .password("password")
+                .host("localhost")
+                .port(5432)
+                .database("t2_db")
+                .username("postgres")
+                .password("password123")
                 .build());
     }
 

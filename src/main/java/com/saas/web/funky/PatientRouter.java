@@ -1,7 +1,7 @@
 package com.saas.web.funky;
 
 import com.saas.entity.model.Patient;
-import com.saas.repository.PatientService;
+import com.saas.service.PatientService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -22,6 +22,6 @@ public class PatientRouter {
     @Bean
     RouterFunction<ServerResponse> getPatientIdRoute() {
         return route(GET("/patient/{id}"),
-                req -> ok().body(patientService.findById(req.pathVariable("id")), Patient.class));
+                req -> ok().body(patientService.findById(Long.valueOf(req.pathVariable("id"))), Patient.class));
     }
 }
