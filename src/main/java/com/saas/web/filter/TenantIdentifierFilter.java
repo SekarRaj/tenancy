@@ -26,8 +26,7 @@ public class TenantIdentifierFilter implements WebFilter {
 
         var tenant = tenantHeaders.get(FIRST);
         if (!VALID_TENANTS.contains(tenant)) {
-            exchange.getResponse().writeWith(Mono.error(new TenantNotFoundException("Not a valid tenant")));
-            return chain.filter(exchange);
+            throw new TenantNotFoundException("Tenant ID is not valid");
         }
 
         return chain
