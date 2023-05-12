@@ -7,10 +7,10 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.Objects;
 
-import static com.saas.entity.constant.TenantConstants.TENANT_KEY;
-import static com.saas.sidecar.TenantMapping.VALID_TENANTS;
+import static com.saas.entity.constant.TenantConstants.CONN_FACTORY;
 import static com.saas.web.entity.RequestHeaderConstants.TENANT_HTTP_HEADER;
 
 @Component
@@ -25,12 +25,10 @@ public class TenantIdentifierFilter implements WebFilter {
         }
 
         var tenant = tenantHeaders.get(FIRST);
-        if (!VALID_TENANTS.contains(tenant)) {
-            throw new TenantNotFoundException("Tenant ID is not valid");
-        }
 
+        var connectionFactories = Map.of("TenantOne", "t1", "TenantTwo", "t2");
         return chain
                 .filter(exchange)
-                .contextWrite(ctx -> ctx.put(TENANT_KEY, tenant));
+                .contextWrite(ctx -> ctx.put(CONN_FACTORY, connectionFactories.getOrDefault(tenant, "t3")));
     }
 }

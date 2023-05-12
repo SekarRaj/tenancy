@@ -20,7 +20,7 @@ import static java.util.Map.entry;
 @EnableTransactionManagement
 public class MultitenantPostgresConfiguration extends AbstractR2dbcConfiguration {
     @Bean
-    public ConnectionFactory tenantOneConnectionFactory() {
+    public ConnectionFactory tOneConnectionFactory() {
         return new PostgresqlConnectionFactory(PostgresqlConnectionConfiguration.builder()
                 .host("localhost")
                 .port(5432)
@@ -31,11 +31,22 @@ public class MultitenantPostgresConfiguration extends AbstractR2dbcConfiguration
     }
 
     @Bean
-    public ConnectionFactory tenantTwoConnectionFactory() {
+    public ConnectionFactory tTwoConnectionFactory() {
         return new PostgresqlConnectionFactory(PostgresqlConnectionConfiguration.builder()
                 .host("localhost")
                 .port(5432)
                 .database("t2_db")
+                .username("postgres")
+                .password("password123")
+                .build());
+    }
+
+    @Bean
+    public ConnectionFactory tThreeConnectionFactory() {
+        return new PostgresqlConnectionFactory(PostgresqlConnectionConfiguration.builder()
+                .host("localhost")
+                .port(5432)
+                .database("t3_db")
                 .username("postgres")
                 .password("password123")
                 .build());
@@ -59,8 +70,9 @@ public class MultitenantPostgresConfiguration extends AbstractR2dbcConfiguration
 
     private Map<String, ConnectionFactory> tenants() {
         return Map.ofEntries(
-                entry("TenantOne", tenantOneConnectionFactory()),
-                entry("TenantTwo", tenantTwoConnectionFactory())
+                entry("t1", tOneConnectionFactory()),
+                entry("t2", tTwoConnectionFactory()),
+                entry("t3", tThreeConnectionFactory())
         );
     }
 

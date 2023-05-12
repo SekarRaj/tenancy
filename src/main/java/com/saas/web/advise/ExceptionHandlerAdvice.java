@@ -1,6 +1,7 @@
 package com.saas.web.advise;
 
 import com.saas.utils.JsonUtils;
+import com.saas.web.entity.exception.PatientException;
 import com.saas.web.entity.response.ExceptionResponse;
 import com.saas.web.entity.exception.TenantNotFoundException;
 import com.saas.web.entity.response.ExceptionResponseData;
@@ -22,6 +23,8 @@ public class ExceptionHandlerAdvice implements WebExceptionHandler {
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
         if (ex instanceof TenantNotFoundException) {
             return handleTenantNotFound(exchange, (TenantNotFoundException) ex);
+        } else if(ex instanceof PatientException) {
+            return handlePatientException(exchange, (PatientException) ex);
         }
         return Mono.error(ex);
     }
@@ -31,6 +34,29 @@ public class ExceptionHandlerAdvice implements WebExceptionHandler {
         exchange.getResponse().setStatusCode(HttpStatus.BAD_REQUEST);
         var response = ExceptionResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
+                .requestId(exchange.getRequest().getId())
+                .data(
+                        ExceptionResponseData.builder()
+                                .path(exchange.getRequest().getPath().toString())
+                                .error(ex.getLocalizedMessage())
+                                .timestamp(LocalDateTime.now())
+                                .build()
+                )
+                .build();
+
+        return exchange.getResponse()
+                .writeWith(
+                        Mono.just(exchange.getResponse()
+                                .bufferFactory()
+                                .wrap(JsonUtils.convertToJson(response).getBytes(StandardCharsets.UTF_8))
+                        )
+                );
+    }
+
+    private Mono<Void> handlePatientException(ServerWebExchange exchange, PatientException ex) {
+        exchange.getResponse().setStatusCode(HttpStatus.NOT_FOUND);
+        var response = ExceptionResponse.builder()
+                .status(HttpStatus.NOT_FOUND.value())
                 .requestId(exchange.getRequest().getId())
                 .data(
                         ExceptionResponseData.builder()

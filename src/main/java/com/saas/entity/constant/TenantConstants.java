@@ -1,5 +1,5 @@
 package com.saas.entity.constant;
 
 public class TenantConstants {
-    public static final String TENANT_KEY = "tenant-key";
+    public static final String CONN_FACTORY = "db-connection";
 }
